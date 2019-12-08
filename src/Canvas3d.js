@@ -193,6 +193,9 @@ export default class Canvas3d {
 
         this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
 
+
+        this.gl.useProgram(this.program);
+
                 // Clear the canvas
         this.gl.clearColor(0.95, 0.95, 0.95, 1);
 
@@ -207,9 +210,6 @@ export default class Canvas3d {
 
 //        webglUtils.resizeCanvasToDisplaySize(gl.canvas);
 
-        this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
-
-        this.gl.useProgram(this.program);
 
          
 
@@ -294,7 +294,6 @@ export default class Canvas3d {
             this.gl.drawElements(style, glObject.length, this.gl.UNSIGNED_SHORT, glObject.offset);
             
         } else {
-//            console.log("draw arrays", glObject.offset, glObject.length);
             this.gl.drawArrays(style, glObject.offset, glObject.length);
         }
     }

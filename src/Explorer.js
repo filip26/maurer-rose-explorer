@@ -70,7 +70,7 @@ class Explorer extends Component {
     componentDidMount() {
 
         this.updateCanvasSize().then(() => {
-      
+
             return this.scene.initialize(this.refs.canvas2d, this.refs.canvas3d);
             
         }).then(() => {
@@ -78,7 +78,7 @@ class Explorer extends Component {
             this.scene.updateSize(this.state.pixelWidth, this.state.pixelHeight);
 
             window.addEventListener("orientationchange", this.chromeWorkaround);            
-            window.addEventListener("resize", this.updateDimensions);            
+            window.addEventListener("resize", this.handleResize);            
 
             this.input.mouse.bind(this.refs.canvas2d);
             this.input.touch.bind(this.refs.canvas2d);
@@ -100,7 +100,7 @@ class Explorer extends Component {
     
     componentWillUnmount() {
         if (this.state.initialized) {
-            window.removeEventListener("resize", this.updateDimensions);
+            window.removeEventListener("resize", this.handleResize);
             window.removeEventListener("orientationchange", this.chromeWorkaround);        
     
             this.input.keyboard.unbind();
@@ -109,12 +109,19 @@ class Explorer extends Component {
         }
     }
     
-    updateDimensions = () => {
+    handleResize = () => {
+        if (this.resizeTimeout) {
+            clearTimeout(this.resizeTimeout);
+        }
 
+        this.resizeTimeout = setTimeout(this.updateDimensions, 125);
+    }
+    
+    updateDimensions = () => {
         this.updateCanvasSize().then(() => {                
             this.scene.updateSize(this.state.pixelWidth, this.state.pixelHeight);
-            
-            window.requestAnimationFrame(this.scene.draw);
+            window.requestAnimationFrame(this.scene.draw);                
+
         });
     }
     
@@ -135,13 +142,10 @@ class Explorer extends Component {
     }
     
     chromeWorkaround = () => {
-        const minSafeSize = Math.min(this.state.pixelWidth - 64, this.state.pixelHeight - 64)
-                
-        // Chrome bug workaround
-        this.refs.canvas2d.width = minSafeSize;
-        this.refs.canvas2d.height = minSafeSize;
-        this.refs.canvas3d.width = minSafeSize;
-        this.refs.canvas3d.height = minSafeSize;
+        this.refs.canvas2d.width = 1;
+        this.refs.canvas2d.height = 1;
+        this.refs.canvas3d.width = 1;
+        this.refs.canvas3d.height = 1;
     }
 
     render() {
