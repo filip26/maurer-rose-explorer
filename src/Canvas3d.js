@@ -1,21 +1,12 @@
 
  
 
-export default class WebGl {
+export default class Canvas3d {
         
-    zoom = 1;
-    translate = [ -5.12, 2.69];        
-
-    constructor(maxTiles=15) {
-        this.maxTiles = maxTiles;
-    }
-
-    createBuffer = (data, dynamic=false) => {
+    createBuffer = () => {
         // Create a new vertext buffer object
         const buffer = this.gl.createBuffer();
 
-//        this.updateBuffer(buffer, data, dynamic);
-        
         return buffer;
     }
     
@@ -49,12 +40,7 @@ export default class WebGl {
         if (!gl) {
             return Promise.reject("WebGL is not supported by your browser.");
         }
-        
-        this.aspect = [ 
-                Math.max(gl.canvas.clientWidth / gl.canvas.clientHeight, 1),
-                Math.max(gl.canvas.clientHeight / gl.canvas.clientWidth, 1)
-                ]; 
-                        
+                                
         // Vertex shader source code
         const vertCode =
             'attribute vec2 coordinates;'
@@ -124,26 +110,23 @@ export default class WebGl {
     }
 
     //
-    update = (objects) => {
+    update = ({aspect, center, zoom, tile, objects3d}) => {
 
-        this.aspect = [ 
-                Math.max(this.gl.canvas.clientWidth / this.gl.canvas.clientHeight, 1),
-                Math.max(this.gl.canvas.clientHeight / this.gl.canvas.clientWidth, 1)
-                ];
-                        
-        const size =  2 / this.maxTiles;
+        const objects = objects3d;
 
-        const xCenter = -1*(this.translate[0] / size);
-        const yCenter = -1*(this.translate[1] / size);
+        const size =  tile.uniformSize;
 
-        const x1 =  Math.floor(xCenter - (1 / (size * this.zoom * this.aspect[1])));        
-        const y1 =  -1*Math.ceil(yCenter + (1 / (size * this.zoom * this.aspect[0])));
+        const xCenter = -1*(center.x / size);
+        const yCenter = -1*(center.y / size);
 
-        const x2 =  Math.floor(xCenter + (1 / (size * this.zoom * this.aspect[1])));
-        const y2 =  -1*Math.ceil(yCenter - (1 / (size * this.zoom * this.aspect[0])));
+        const x1 =  Math.floor(xCenter - (1 / (size * zoom * aspect.y)));        
+        const y1 =  -1*Math.ceil(yCenter + (1 / (size * zoom * aspect.x)));
+
+        const x2 =  Math.floor(xCenter + (1 / (size * zoom * aspect.y)));
+        const y2 =  -1*Math.ceil(yCenter - (1 / (size * zoom * aspect.x)));
         
         
-//console.log(size*this.zoom, x1, y1, x2, y2);
+//console.log(size*zoom, x1, y1, x2, y2);
 
         const have = new Array(Math.abs(y2-y1)+1);
         for (let y=0; y < have.length; y++) {
@@ -157,9 +140,11 @@ export default class WebGl {
         for (let i in objects) {
             if (!objects[i].x || !objects[i].y) {
                 avail.push(objects[i]);
+
             } else if (objects[i].x >= x1 && objects[i].x <= x2 && objects[i].y >= y1 && objects[i].y <= y2) {
                 have[Math.abs(objects[i].y - y1)][Math.abs(objects[i].x - x1)] = true;
-//                xx++;
+  //              xx++;
+
             } else {
                 avail.push(objects[i]);
                 objects[i].x = null;
@@ -182,7 +167,10 @@ export default class WebGl {
                     continue;
                 }
                 
-                (avail[ai++]).update(x, y, this);
+                (avail[ai]).compute(x, y, this);
+                
+                ai++;
+//                (avail[ai++]).update(aspect, center, zoom);
                 
                 if (ai >= avail.length) {
                     break;
@@ -190,32 +178,32 @@ export default class WebGl {
                 
             }
         }
+        //console.log("objects", ai);
+    }
+
+    draw = () => {
+        
         
 
-//console.log(size, x1, y1);
-
-//        const x1 = ((centerX / size) - Math.floor(centerX / size)) * size;
-//        const y1 = ((centerY / size) - Math.floor(centerY / size)) * size; 
-//
-//        let xStart = -1*Math.floor(centerY / size);
-//        let yStart = -1*Math.floor(centerX / size);
-//
-//        if (xStart > 0) {
-//            xStart++;
-//        }
-//        if (yStart > 0) {
-//            yStart++;
-//        }
-//        
-//        console.log(xStart, yStart, x1, y1);
-//        
     }
 
     // Draw the scene.    
-    drawScene = (time, objects) => {
+    drawScene = (objects, scene) => {
 
 
-        time *= 0.0005;
+        this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
+
+                // Clear the canvas
+        this.gl.clearColor(0.95, 0.95, 0.95, 1);
+
+        // Clear the color buffer bit
+        this.gl.clear(this.gl.COLOR_BUFFER_BIT);
+
+        this.gl.disable(this.gl.DEPTH_TEST);
+        this.gl.enable(this.gl.DITHER);
+
+//console.log("drawScene", objects);
+//        time *= 0.0005;
 
 //        webglUtils.resizeCanvasToDisplaySize(gl.canvas);
 
@@ -223,29 +211,25 @@ export default class WebGl {
 
         this.gl.useProgram(this.program);
 
-
-        // Clear the canvas
-        this.gl.clearColor(0.95, 0.95, 0.95, 1);
-
-        this.gl.disable(this.gl.DEPTH_TEST);
-        this.gl.enable(this.gl.DITHER);
          
-        // Clear the color buffer bit
-        this.gl.clear(this.gl.COLOR_BUFFER_BIT);
 
 //        console.log(this.uniformScaleMatrix);
 //        console.log(this.createScaleMatrix(aspect));
-
-        this.aspect = [ 
-                Math.max(this.gl.canvas.clientWidth / this.gl.canvas.clientHeight, 1),
-                Math.max(this.gl.canvas.clientHeight / this.gl.canvas.clientWidth, 1)
-                ]; 
         
         
-        objects.flatMap(object => object.shapes()).forEach(shape => this.drawShape(shape));
+        objects && objects.flatMap(object => object.shapes()).forEach(shape => this.drawShape(shape, scene));
     }
 
-    drawShape = glObject => {
+    drawShape = (glObject, {aspect, zoom, center}) => {
+
+//console.log(glObject.state);
+//        if (glObject.state !== 'new') {
+////            return;
+//        }
+//        
+//        glObject.state = 'drawn';
+
+//console.log("drawScene",aspect, zoom, center);
 
         if (glObject.colorBuffer) {
             this.gl.bindBuffer(this.gl.ARRAY_BUFFER, glObject.colorBuffer);
@@ -275,14 +259,15 @@ export default class WebGl {
 
         // Scale
         if (glObject.scaleFnc) {
-            this.gl.uniformMatrix4fv(this.uniformScaleMatrix, false, glObject.scaleFnc(this.aspect, this.zoom));
+            this.gl.uniformMatrix4fv(this.uniformScaleMatrix, false, glObject.scaleFnc(aspect, zoom));
         }
         
-        // Translace
-        const tx =  glObject.translateFnc ? glObject.translateFnc(this.aspect, this.translate) : this.translate;
-
+//        console.log("xyz", glObject.translateFnc(aspect, center));
         
-        this.gl.uniform4f(this.attrTranslation, tx[0], tx[1], 0.0, 0.0);
+        // Translace
+        const tx =  glObject.translateFnc ? glObject.translateFnc(aspect, center) : center;
+//        const tx = center;
+        this.gl.uniform4f(this.attrTranslation, tx.x, tx.y, 0.0, 0.0);
 
         let style = this.gl.POINTS;
         switch (glObject.styleName) {
@@ -309,21 +294,9 @@ export default class WebGl {
             this.gl.drawElements(style, glObject.length, this.gl.UNSIGNED_SHORT, glObject.offset);
             
         } else {
+//            console.log("draw arrays", glObject.offset, glObject.length);
             this.gl.drawArrays(style, glObject.offset, glObject.length);
         }
-    }
-    
-    move = (dX, dY) => {
-        
-        this.aspect = [ 
-                Math.max(this.gl.canvas.clientWidth  / this.gl.canvas.clientHeight, 1),
-                Math.max(this.gl.canvas.clientHeight / this.gl.canvas.clientWidth, 1)
-                ]; 
-
-        dX = (dX / (this.gl.canvas.clientWidth * this.aspect[1]) *3) / this.zoom;
-        dY = (dY / (this.gl.canvas.clientHeight * this.aspect[0])*3) / this.zoom;
-        
-        this.translate = [this.translate[0] + dX, this.translate[1] - dY];
     }
     
 }
