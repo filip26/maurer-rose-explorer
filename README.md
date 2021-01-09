@@ -1,3 +1,3 @@
 ## Maurer Rose Explorer
 
-[Live Demo](https://asheep.ai/maurer-rose-explorer/)
+[Live Demo](https://filip26.github.io/maurer-rose-explorer/)
