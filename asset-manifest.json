@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/maurer-rose-explorer/static/css/main.91d7ac6c.chunk.css",
+    "main.js": "/maurer-rose-explorer/static/js/main.6b518a6f.chunk.js",
+    "main.js.map": "/maurer-rose-explorer/static/js/main.6b518a6f.chunk.js.map",
+    "runtime-main.js": "/maurer-rose-explorer/static/js/runtime-main.8d7141cb.js",
+    "runtime-main.js.map": "/maurer-rose-explorer/static/js/runtime-main.8d7141cb.js.map",
+    "static/js/2.caed70eb.chunk.js": "/maurer-rose-explorer/static/js/2.caed70eb.chunk.js",
+    "static/js/2.caed70eb.chunk.js.map": "/maurer-rose-explorer/static/js/2.caed70eb.chunk.js.map",
+    "index.html": "/maurer-rose-explorer/index.html",
+    "static/css/main.91d7ac6c.chunk.css.map": "/maurer-rose-explorer/static/css/main.91d7ac6c.chunk.css.map",
+    "static/js/2.caed70eb.chunk.js.LICENSE.txt": "/maurer-rose-explorer/static/js/2.caed70eb.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.8d7141cb.js",
+    "static/js/2.caed70eb.chunk.js",
+    "static/css/main.91d7ac6c.chunk.css",
+    "static/js/main.6b518a6f.chunk.js"
+  ]
+}
