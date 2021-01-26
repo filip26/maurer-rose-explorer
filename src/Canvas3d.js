@@ -124,9 +124,6 @@ export default class Canvas3d {
 
         const x2 =  Math.floor(xCenter + (1 / (size * zoom * aspect.y)));
         const y2 =  -1*Math.ceil(yCenter - (1 / (size * zoom * aspect.x)));
-        
-        
-//console.log(size*zoom, x1, y1, x2, y2);
 
         const have = new Array(Math.abs(y2-y1)+1);
         for (let y=0; y < have.length; y++) {
@@ -135,7 +132,7 @@ export default class Canvas3d {
                 have[y][x] = false;
             }
         }
-//let xx = 0
+
         const avail = [];
         for (let i in objects) {
             if (!objects[i].x || !objects[i].y) {
@@ -143,7 +140,6 @@ export default class Canvas3d {
 
             } else if (objects[i].x >= x1 && objects[i].x <= x2 && objects[i].y >= y1 && objects[i].y <= y2) {
                 have[Math.abs(objects[i].y - y1)][Math.abs(objects[i].x - x1)] = true;
-  //              xx++;
 
             } else {
                 avail.push(objects[i]);
@@ -151,8 +147,6 @@ export default class Canvas3d {
                 objects[i].y = null;
             }
         }
-
-//console.log("objects", objects.length, avail.length, xx);
 
         let ai = 0;
         for (let y=y1; y <= y2; y++) {
@@ -162,7 +156,6 @@ export default class Canvas3d {
             }
             
             for (let x=x1; x <= x2; x++) {
-//                console.log(x, y, x1, y1);
                 if (have[Math.abs(y-y1)][Math.abs(x-x1)]) {
                     continue;
                 }
@@ -170,7 +163,6 @@ export default class Canvas3d {
                 (avail[ai]).compute(x, y, this);
                 
                 ai++;
-//                (avail[ai++]).update(aspect, center, zoom);
                 
                 if (ai >= avail.length) {
                     break;
@@ -178,25 +170,21 @@ export default class Canvas3d {
                 
             }
         }
-        //console.log("objects", ai);
     }
 
     draw = () => {
-        
-        
 
     }
 
     // Draw the scene.    
     drawScene = (objects, scene) => {
 
-
         this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
 
 
         this.gl.useProgram(this.program);
 
-                // Clear the canvas
+        // Clear the canvas
         this.gl.clearColor(0.95, 0.95, 0.95, 1);
 
         // Clear the color buffer bit
@@ -204,32 +192,11 @@ export default class Canvas3d {
 
         this.gl.disable(this.gl.DEPTH_TEST);
         this.gl.enable(this.gl.DITHER);
-
-//console.log("drawScene", objects);
-//        time *= 0.0005;
-
-//        webglUtils.resizeCanvasToDisplaySize(gl.canvas);
-
-
-         
-
-//        console.log(this.uniformScaleMatrix);
-//        console.log(this.createScaleMatrix(aspect));
-        
         
         objects && objects.flatMap(object => object.shapes()).forEach(shape => this.drawShape(shape, scene));
     }
 
     drawShape = (glObject, {aspect, zoom, center}) => {
-
-//console.log(glObject.state);
-//        if (glObject.state !== 'new') {
-////            return;
-//        }
-//        
-//        glObject.state = 'drawn';
-
-//console.log("drawScene",aspect, zoom, center);
 
         if (glObject.colorBuffer) {
             this.gl.bindBuffer(this.gl.ARRAY_BUFFER, glObject.colorBuffer);
@@ -262,11 +229,9 @@ export default class Canvas3d {
             this.gl.uniformMatrix4fv(this.uniformScaleMatrix, false, glObject.scaleFnc(aspect, zoom));
         }
         
-//        console.log("xyz", glObject.translateFnc(aspect, center));
-        
         // Translace
         const tx =  glObject.translateFnc ? glObject.translateFnc(aspect, center) : center;
-//        const tx = center;
+
         this.gl.uniform4f(this.attrTranslation, tx.x, tx.y, 0.0, 0.0);
 
         let style = this.gl.POINTS;
