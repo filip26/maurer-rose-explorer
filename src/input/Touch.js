@@ -51,28 +51,30 @@ export default class Touch {
                 }
             }
             
-                    const curDist = Math.sqrt(
-                                    Math.pow(
-                                        this.events[0].changedTouches[0].clientX - this.events[1].changedTouches[0].clientX,
-                                        2
-                                    )
-                                    +
-                                    Math.pow(
-                                        this.events[0].changedTouches[0].clientY - this.events[1].changedTouches[0].clientY,
-                                        2                                        
-                                    )
-                                );
+            const curDist = Math.sqrt(
+                            Math.pow(
+                                this.events[0].changedTouches[0].clientX - this.events[1].changedTouches[0].clientX,
+                                2
+                            )
+                            +
+                            Math.pow(
+                                this.events[0].changedTouches[0].clientY - this.events[1].changedTouches[0].clientY,
+                                2                                        
+                            )
+                        );
 
-                    let zoom = this.scene.zoom;
+            let zoom = this.scene.zoom;
         
-                    if (this.prevDist > 0) {
+            if (this.prevDist > 0) {
         
-                        if (curDist > this.prevDist) {
-                            zoom += (0.04 * zoom);
-                        }
-                        if (curDist < this.prevDist) {
-                            zoom -= (0.04  * zoom);
-                        }
+                if (curDist > this.prevDist) {
+                    zoom += (0.04 * zoom);
+                }
+
+                if (curDist < this.prevDist) {
+                    zoom -= (0.04  * zoom);
+                }
+
                 if (zoom < 0.5) {
                     zoom = 0.5;
                 }
@@ -83,7 +85,6 @@ export default class Touch {
         }
         e.preventDefault();
         return false;
-        
     }
     
     handleTouchStart = (e) => {
@@ -105,13 +106,11 @@ export default class Touch {
       
                 this.lastTouchTime = 0;
                                 
-                e.preventDefault();
-                return false;
+            } else {            
+                this.lastTouchCoords = [e.changedTouches[0].pageX, e.changedTouches[0].pageY];
+                this.lastTouchTime = new Date().getTime() 
+                this.events.push(e);
             }
-            
-            this.lastTouchCoords = [e.changedTouches[0].pageX, e.changedTouches[0].pageY];
-            this.lastTouchTime = new Date().getTime() 
-            this.events.push(e);
 
         } else if (this.events.length === 1) {
             this.events.push(e);

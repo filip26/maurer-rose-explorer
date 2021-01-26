@@ -21,7 +21,6 @@ export default class MaurerRose {
         this.tY = -this.y * this.width - this.width / 2;
 
         this.vertices = new Array(360);
-//        this.vertices.push(-this.width/2, this.width/2, this.width/2, this.width/2, this.width/2, -this.width/2, -this.width/2, -this.width/2);
         
         this.v(n, d, 0, 0, this.vertices, 0);        
         gl.updateBuffer(this.buffer, this.vertices, true);                
@@ -61,11 +60,8 @@ export default class MaurerRose {
             };
     }
    
-    
-        v = (n = 4, d = 31, ofsetX = 0, ofsetY = 0, points, index) => {
+    v = (n, d, ofsetX, ofsetY, points, index) => {
 
-//console.log(n, d);        
-        
         for (let theta=0; theta < 360; theta+=1) {
 
             const k = theta * d * Math.PI / 180;
@@ -73,14 +69,11 @@ export default class MaurerRose {
             
             const x = r * Math.cos(k);
             const y = r * Math.sin(k);
-//    if (theta % 2 === 0) {
+
             points[index + theta*2] = x   + ofsetX; 
             points[index + theta*2 + 1] = y   - ofsetY;        
-            }
-//        }
-//        console.log(v);
-        return index + 360 * 2;
-    }
+        }
 
-    
+        return index + 360 * 2;
+    }    
 }

@@ -4,7 +4,7 @@ const AXIS_BACKGROUND = '#dadadaff';
 const AXIS_FONT_COLOR = '#3a3a3aff';
 const AXIS_DELIMITER_COLOR = '#ffffffff';
 
-export default class Overlay {
+export default class Canvas2d {
     
     initialize = async (canvas) => {
      
@@ -25,7 +25,6 @@ export default class Overlay {
     
     update = ({aspect, center, zoom, tile, width, height}) => {
 
-//console.log("overlay", "update", aspect, center, zoom);
         const centerX = width / 2 + width * aspect.y * zoom * (center.x / 2);
         const centerY = height / 2 - height * aspect.x * zoom * (center.y / 2);
         
@@ -46,7 +45,6 @@ export default class Overlay {
                 
 
     drawScene = () => {
-  //      console.log("axis", this.xAxis, this.yAxis);
         if (!this.xAxis || !this.yAxis) {
             return;
         }
