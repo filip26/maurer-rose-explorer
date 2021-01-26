@@ -4,7 +4,7 @@ const AXIS_BACKGROUND = '#dadadaff';
 const AXIS_FONT_COLOR = '#3a3a3aff';
 const AXIS_DELIMITER_COLOR = '#ffffffff';
 
-export default class Overlay {
+export default class Canvas2d {
     
     initialize = async (canvas) => {
      
