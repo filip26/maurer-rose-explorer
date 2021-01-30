@@ -35,7 +35,7 @@ export default class Canvas3d {
 
     initialize = async (canvas) => {
      
-        const gl = canvas.getContext("webgl")
+        const gl = canvas.getContext("webgl");
                 
         if (!gl) {
             return Promise.reject("WebGL is not supported by your browser.");
@@ -127,7 +127,7 @@ export default class Canvas3d {
 
         const have = new Array(Math.abs(y2-y1)+1);
         for (let y=0; y < have.length; y++) {
-            have[y] = new Array(Math.abs(x2-x1)+1)
+            have[y] = new Array(Math.abs(x2-x1)+1);
             for (let x=0; x < have[y].length; x++) {
                 have[y][x] = false;
             }
@@ -261,6 +261,5 @@ export default class Canvas3d {
         } else {
             this.gl.drawArrays(style, glObject.offset, glObject.length);
         }
-    }
-    
+    }   
 }
