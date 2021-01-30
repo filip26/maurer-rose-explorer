@@ -108,7 +108,7 @@ export default class Touch {
                                 
             } else {            
                 this.lastTouchCoords = [e.changedTouches[0].pageX, e.changedTouches[0].pageY];
-                this.lastTouchTime = new Date().getTime() 
+                this.lastTouchTime = new Date().getTime(); 
                 this.events.push(e);
             }
 

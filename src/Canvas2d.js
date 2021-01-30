@@ -56,7 +56,7 @@ export default class Canvas2d {
         this.ctx.save();
         this.ctx.beginPath();
         this.ctx.fillStyle = AXIS_FONT_COLOR;        
-        this.ctx.font = '300 13px sans-serif'
+        this.ctx.font = '300 13px sans-serif';
         this.ctx.textAlign = 'center';
         this.ctx.textBaseline = 'middle';
 
@@ -140,15 +140,15 @@ export default class Canvas2d {
         this.ctx.lineTo(length, length);
         this.ctx.lineTo(length, 0);
         this.ctx.lineTo(0, 0);
-        
+
         this.ctx.closePath();
-        
+
         this.ctx.lineWidth = 1;
         this.ctx.strokeStyle = '#ffffffff';        
-        
+
         this.ctx.stroke();
-        
-        this.ctx.font = '300 14px Roboto'
+
+        this.ctx.font = '300 14px Roboto';
         this.ctx.fillStyle = '#357a38';
 
         this.ctx.fillStyle = '#ffffffff';
@@ -157,7 +157,7 @@ export default class Canvas2d {
         this.ctx.fillText("d", length / 3 + 7,  length - 7);
         this.ctx.textAlign = 'right';
         this.ctx.fillText("n", length - 7, length / 3 - 7);
-        
+
         this.ctx.restore();
     }
 }
