@@ -14,7 +14,7 @@ export default class Canvas2d {
             return Promise.reject("2d canvas is not supported by your browser.");
         }
         this.ctx = ctx;
-        
+
         return Promise.resolve();        
     }
     

@@ -4,10 +4,13 @@
   "private": true,
   "homepage": "https://filip26.github.io/maurer-rose-explorer",
   "dependencies": {
-    "@material-ui/core": "^4.12.3",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
-    "react-scripts": "4.0.3"
+    "@emotion/react": "^11.7.1",
+    "@emotion/styled": "^11.6.0",
+    "@mui/material": "^5.3.0",
+    "@mui/styles": "^5.3.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-scripts": "^5.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
