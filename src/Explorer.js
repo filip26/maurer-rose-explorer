@@ -1,6 +1,6 @@
 import React, { Component, } from 'react';
 
-import { AppBar, Toolbar, Link, Typography, CircularProgress, Box, IconButton, Button } from '@mui/material';
+import { AppBar, Toolbar, Link, Typography, CircularProgress, Box, Button } from '@mui/material';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import { Mouse, Keyboard, Touch } from './input';
 
@@ -113,7 +113,7 @@ class Explorer extends Component {
             <AppBar
                 position="static"
                 sx={{
-                    // backgroundColor: '#4caf50',
+                    backgroundColor: '#4caf50',
                 }}
             >
                 <Toolbar>
@@ -124,13 +124,10 @@ class Explorer extends Component {
                         href="https://en.wikipedia.org/wiki/Maurer_rose"
                         target="_blank"
                         color="inherit"
-                        sx={{ textAlign: "left" }}
                     >
                         Maurer Rose Explorer
                     </Link>
-                    <Box
-                        sx={{ flexGrow: 1 }}
-                    ></Box>
+                    <Box sx={{ flexGrow: 1 }} ></Box>
                     <Button
                         size="large"
                         edge="start"
@@ -139,6 +136,7 @@ class Explorer extends Component {
                         sx={{ mr: 2 }}
                         startIcon={<GitHubIcon />}
                         href="https://github.com/filip26/maurer-rose-explorer"
+                        target="_blank"
                     >
                         Code
                     </Button>
@@ -189,42 +187,39 @@ class Explorer extends Component {
                     <Box
                     >
                         <canvas
-                            component="canvas"
                             ref="canvas3d"
                             width={this.state.pixelWidth}
                             height={this.state.pixelHeight}
 
                         />
                     </Box>
-                    <Box
-                        sx={{
-                            position: 'absolute',
-                            left: 0,
-                            top: 0,
-                            zIndex: 10,
-                        }}
-                    >
+
                         <canvas
-                            component="canvas"
                             ref="canvas2d"
+                            style={{
+                                position: 'absolute',
+                                left: 0,
+                                top: 0,
+                                zIndex: 10,
+                                touchAction: "none",    
+                            }}
                             width={this.state.pixelWidth}
                             height={this.state.pixelHeight}
                         />
-                    </Box>
                     {this.state.initialized &&
                         <Box
                             ref="help"
                             sx={{
                                 position: 'absolute',
-                                bottom: 5,
-                                right: 85,
+                                bottom: 7,
+                                right: 100,
                                 backgroundColor: '#eaeaeaff',
                                 padding: 1,
-                                borderRadius: 5,
                                 fontSize: 15,
                                 fontWeight: 300,
                                 color: '#1a1a1aff',
-                                marginLeft: 45,
+                                borderRadius: "5px",
+                                marginLeft: "48px",
                             }}
                         >
                             use a mouse or gestures to move and zoom

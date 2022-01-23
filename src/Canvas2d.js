@@ -15,7 +15,7 @@ export default class Canvas2d {
         }
         this.ctx = ctx;
 
-        return Promise.resolve();        
+        return Promise.resolve();
     }
     
     draw = () => {

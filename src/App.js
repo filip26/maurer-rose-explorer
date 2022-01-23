@@ -1,5 +1,4 @@
 import React from 'react';
-import './App.css';
 
 import Explorer from './Explorer';
 
@@ -9,7 +8,7 @@ function App() {
   return (
     <>
       <CssBaseline />
-      <div className="App">
+      <div>
         <Explorer />
       </div>
     </>

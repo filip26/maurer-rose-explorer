@@ -8,11 +8,11 @@ export default class Mouse {
     bind = (ref) => {
         this.ref = ref;
         
-        ref.addEventListener("wheel", this.handleMouseWheel, false);
-        ref.addEventListener("mousedown", this.handleMouseDown, false);
-        ref.addEventListener("mouseup", this.handleMouseUp, false);
-        ref.addEventListener("mousemove", this.handleMouseMove, false);
-        ref.addEventListener("mouseout", this.handleMouseOut, false);
+        ref.addEventListener("wheel", this.handleMouseWheel, { passive: false });
+        ref.addEventListener("mousedown", this.handleMouseDown, { passive: false });
+        ref.addEventListener("mouseup", this.handleMouseUp, { passive: false });
+        ref.addEventListener("mousemove", this.handleMouseMove, { passive: false });
+        ref.addEventListener("mouseout", this.handleMouseOut, { passive: false });
     }
     
     unbind = () => {
@@ -28,7 +28,8 @@ export default class Mouse {
     }
         
     handleMouseWheel = e => {
-        
+        e.preventDefault();
+
         this.isMouseDown = false;
         
         let zoom = this.scene.zoom;
@@ -49,6 +50,8 @@ export default class Mouse {
     }
         
     handleMouseDown = e => {
+        e.preventDefault();
+
         if (this.isMouseDown) {
             this.isMouseDown = false;
             
@@ -57,7 +60,7 @@ export default class Mouse {
             this.isMouseDown = true;
         }
 
-        e.preventDefault();
+        
         return false;
     }
 
@@ -70,6 +73,7 @@ export default class Mouse {
 
     handleMouseMove = e => {
         if (this.isMouseDown) {
+            e.preventDefault();
             
             const dX = ((e.pageX - this.lastDragCoords[0]) / (this.scene.width * this.scene.aspect.y) * 3) / this.scene.zoom;
             const dY = -1*((e.pageY - this.lastDragCoords[1]) / (this.scene.height* this.scene.aspect.x) * 3) / this.scene.zoom;
@@ -78,7 +82,6 @@ export default class Mouse {
 
             this.scene.translate(dX, dY);
             
-            e.preventDefault();
             return false;
         }
     }
