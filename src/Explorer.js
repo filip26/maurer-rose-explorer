@@ -184,28 +184,29 @@ class Explorer extends Component {
                         position: 'relative',
                     }}
                 >
-                    <Box
-                    >
-                        <canvas
-                            ref="canvas3d"
-                            width={this.state.pixelWidth}
-                            height={this.state.pixelHeight}
+                    <canvas
+                        ref="canvas3d"
+                        style={{
+                            display: "block",
+                        }}
+                        width={this.state.pixelWidth}
+                        height={this.state.pixelHeight}
 
-                        />
-                    </Box>
+                    />
 
-                        <canvas
-                            ref="canvas2d"
-                            style={{
-                                position: 'absolute',
-                                left: 0,
-                                top: 0,
-                                zIndex: 10,
-                                touchAction: "none",    
-                            }}
-                            width={this.state.pixelWidth}
-                            height={this.state.pixelHeight}
-                        />
+                    <canvas
+                        ref="canvas2d"
+                        style={{
+                            position: 'absolute',
+                            left: 0,
+                            top: 0,
+                            zIndex: 10,
+                            touchAction: "none",
+                        }}
+                        width={this.state.pixelWidth}
+                        height={this.state.pixelHeight}
+                    />
+
                     {this.state.initialized &&
                         <Box
                             ref="help"

@@ -1,25 +1,25 @@
 
- 
+
 
 export default class Canvas3d {
-        
+
     createBuffer = () => {
         // Create a new vertext buffer object
         const buffer = this.gl.createBuffer();
 
         return buffer;
     }
-    
+
     createIndexBuffer = (indices, dynamic=false) => {
         const buffer = this.gl.createBuffer();
-        
+
         this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, buffer);
         this.gl.bufferData(this.gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), dynamic ? this.gl.DYNAMIC_DRAW : this.gl.STATIC_DRAW);
         this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, null);
-        
+
         return buffer;
     }
-    
+
     updateBuffer = (buffer, data, dynamic=false) => {
 
         //Bind vertex buffer object
@@ -29,27 +29,27 @@ export default class Canvas3d {
         this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(data), dynamic ? this.gl.DYNAMIC_DRAW : this.gl.STATIC_DRAW);
 
         // Unbind
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, null);        
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, null);
     }
-    
+
 
     initialize = async (canvas) => {
-     
+
         const gl = canvas.getContext("webgl");
-                
+
         if (!gl) {
             return Promise.reject("WebGL is not supported by your browser.");
         }
-                                
+
         // Vertex shader source code
         const vertCode =
             'attribute vec2 coordinates;'
-            + 'uniform mat4 scale;' 
+            + 'uniform mat4 scale;'
             + 'uniform vec4 translation;'
-            + 'attribute vec3 color;'  
-            + 'varying vec3 vColor;' 
-            + 'void main(void) {' 
-            + ' gl_Position = scale * (vec4(coordinates, 0.0, 1.0) + translation) ; gl_PointSize = 5.0; vColor = color;' 
+            + 'attribute vec3 color;'
+            + 'varying vec3 vColor;'
+            + 'void main(void) {'
+            + ' gl_Position = scale * (vec4(coordinates, 0.0, 1.0) + translation) ; gl_PointSize = 5.0; vColor = color;'
             + '}';
 
         // Create a vertex shader object
@@ -64,10 +64,10 @@ export default class Canvas3d {
         // Fragment shader source code
         const fragCode =
             'precision mediump float;'
-            + 'varying vec3 vColor;' 
-            + 'void main(void) {' 
-            + 'gl_FragColor = vec4(vColor, 1.);' 
-            + '}';            
+            + 'varying vec3 vColor;'
+            + 'void main(void) {'
+            + 'gl_FragColor = vec4(vColor, 1.);'
+            + '}';
 //            'void main(void) {' + 'gl_FragColor = vec4(0.1, 0.1, 0.1, 1.);' + '}';
 
         // Create fragment shader object
@@ -83,8 +83,8 @@ export default class Canvas3d {
         const shaderProgram = gl.createProgram();
 
         // Attach a vertex shader
-        gl.attachShader(shaderProgram, vertShader); 
-         
+        gl.attachShader(shaderProgram, vertShader);
+
         // Attach a fragment shader
         gl.attachShader(shaderProgram, fragShader);
 
@@ -98,14 +98,14 @@ export default class Canvas3d {
         this.attrCoord = gl.getAttribLocation(shaderProgram, "coordinates");
 
         this.attrColor = gl.getAttribLocation(shaderProgram, "color");
-        
+
         this.attrTranslation = gl.getUniformLocation(shaderProgram, 'translation');
 
         this.uniformScaleMatrix = gl.getUniformLocation(shaderProgram, "scale");
 
-        this.gl = gl;   
-        this.program = shaderProgram;           
-        
+        this.gl = gl;
+        this.program = shaderProgram;
+
         return Promise.resolve();
     }
 
@@ -119,7 +119,7 @@ export default class Canvas3d {
         const xCenter = -1*(center.x / size);
         const yCenter = -1*(center.y / size);
 
-        const x1 =  Math.floor(xCenter - (1 / (size * zoom * aspect.y)));        
+        const x1 =  Math.floor(xCenter - (1 / (size * zoom * aspect.y)));
         const y1 =  -1*Math.ceil(yCenter + (1 / (size * zoom * aspect.x)));
 
         const x2 =  Math.floor(xCenter + (1 / (size * zoom * aspect.y)));
@@ -154,20 +154,20 @@ export default class Canvas3d {
             if (ai >= avail.length) {
                 break;
             }
-            
+
             for (let x=x1; x <= x2; x++) {
                 if (have[Math.abs(y-y1)][Math.abs(x-x1)]) {
                     continue;
                 }
-                
+
                 (avail[ai]).compute(x, y, this);
-                
+
                 ai++;
-                
+
                 if (ai >= avail.length) {
                     break;
                 }
-                
+
             }
         }
     }
@@ -176,7 +176,7 @@ export default class Canvas3d {
 
     }
 
-    // Draw the scene.    
+    // Draw the scene.
     drawScene = (objects, scene) => {
 
         this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
@@ -192,7 +192,7 @@ export default class Canvas3d {
 
         this.gl.disable(this.gl.DEPTH_TEST);
         this.gl.enable(this.gl.DITHER);
-        
+
         objects && objects.flatMap(object => object.shapes()).forEach(shape => this.drawShape(shape, scene));
     }
 
@@ -200,10 +200,10 @@ export default class Canvas3d {
 
         if (glObject.colorBuffer) {
             this.gl.bindBuffer(this.gl.ARRAY_BUFFER, glObject.colorBuffer);
-            
+
             // point attribute to the volor buffer object
             this.gl.vertexAttribPointer(this.attrColor, 3, this.gl.FLOAT, false,0,0) ;
- 
+
             // enable the color attribute
             this.gl.enableVertexAttribArray(this.attrColor);
 
@@ -228,7 +228,7 @@ export default class Canvas3d {
         if (glObject.scaleFnc) {
             this.gl.uniformMatrix4fv(this.uniformScaleMatrix, false, glObject.scaleFnc(aspect, zoom));
         }
-        
+
         // Translace
         const tx =  glObject.translateFnc ? glObject.translateFnc(aspect, center) : center;
 
@@ -237,29 +237,29 @@ export default class Canvas3d {
         let style = this.gl.POINTS;
         switch (glObject.styleName) {
         case 'line-loop':
-            style = this.gl.LINE_LOOP;    
+            style = this.gl.LINE_LOOP;
             break;
-            
+
         case 'line-strip':
-            style = this.gl.LINE_STRIP;    
+            style = this.gl.LINE_STRIP;
             break;
 
         case 'lines':
-            style = this.gl.LINES;    
+            style = this.gl.LINES;
             break;
-                
+
         case 'triangles':
             style = this.gl.TRIANGLES;
             break;
-            
-        default:            
-        }                        
+
+        default:
+        }
 
         if (glObject.indexBuffer) {
             this.gl.drawElements(style, glObject.length, this.gl.UNSIGNED_SHORT, glObject.offset);
-            
+
         } else {
             this.gl.drawArrays(style, glObject.offset, glObject.length);
         }
-    }   
+    }
 }

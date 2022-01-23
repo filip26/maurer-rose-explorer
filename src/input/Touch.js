@@ -89,7 +89,7 @@ export default class Touch {
     }
 
     handleTouchStart = (e) => {
-        
+
         e.preventDefault();
 
         if (this.events.length === 0) {
