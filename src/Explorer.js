@@ -1,6 +1,7 @@
 import React, { Component, } from 'react';
 
-import { AppBar, Toolbar, Link, Typography, CircularProgress, Box } from '@mui/material';
+import { AppBar, Toolbar, Link, Typography, CircularProgress, Box, IconButton, Button } from '@mui/material';
+import GitHubIcon from '@mui/icons-material/GitHub';
 import { Mouse, Keyboard, Touch } from './input';
 
 import Scene from './Scene';
@@ -112,7 +113,7 @@ class Explorer extends Component {
             <AppBar
                 position="static"
                 sx={{
-                    backgroundColor: '#4caf50',
+                    // backgroundColor: '#4caf50',
                 }}
             >
                 <Toolbar>
@@ -120,11 +121,27 @@ class Explorer extends Component {
                         variant="h6"
                         underline="none"
                         component="a"
-                        href="https://en.wikipedia.org/wiki/Maurer_rose" target="_blank"
+                        href="https://en.wikipedia.org/wiki/Maurer_rose"
+                        target="_blank"
                         color="inherit"
+                        sx={{ textAlign: "left" }}
                     >
                         Maurer Rose Explorer
                     </Link>
+                    <Box
+                        sx={{ flexGrow: 1 }}
+                    ></Box>
+                    <Button
+                        size="large"
+                        edge="start"
+                        color="inherit"
+                        aria-label="menu"
+                        sx={{ mr: 2 }}
+                        startIcon={<GitHubIcon />}
+                        href="https://github.com/filip26/maurer-rose-explorer"
+                    >
+                        Code
+                    </Button>
                 </Toolbar>
             </AppBar>
 
